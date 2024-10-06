@@ -16,7 +16,7 @@ export default function Camera() {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView | null>(null);
-  const [timerCapture, setTimerCapture] = useState(15000); // Interval capture timer
+  const [timerCapture, setTimerCapture] = useState<number>(15000); // Interval capture timer
   const [isAutoCapture, setIsAutoCapture] = useState<any>("pause"); // Play/Pause state
   const intervalId = useRef<any>(null); // Ref to store interval ID
 
@@ -163,6 +163,7 @@ export default function Camera() {
             onPress={handleSetAutoCapture}
           >
             <AntDesign name={isAutoCapture} size={44} color="black" />
+            <Text style={{color:"blue", fontWeight:"bold", fontSize:15}}>{isAutoCapture}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
