@@ -73,7 +73,7 @@ export default function Camera() {
             headers: {
               "Content-Type": "multipart/form-data",
             },
-          }
+          },
         );
 
         // Handle response
