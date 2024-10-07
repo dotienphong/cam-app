@@ -17,8 +17,12 @@ export default function Camera() {
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView | null>(null);
   const [timerCapture, setTimerCapture] = useState<number>(15000); // Interval capture timer
-  const [isAutoCapture, setIsAutoCapture] = useState<any>("pause"); // Play/Pause state
-  const intervalId = useRef<any>(null); // Ref to store interval ID
+  const [isAutoCapture, setIsAutoCapture] = useState<any>("play"); // Play/Pause state
+  const intervalId = useRef<any>(null);
+  const [result, setResult] = useState<string | null>(null);
+
+  const URL_API_SENT_IMAGE =
+    "https://cc8e-2402-800-63b8-8094-980c-b1a7-fa87-a765.ngrok-free.app/upload";
 
   // Request camera permissions
   if (!permission) {
@@ -66,20 +70,16 @@ export default function Camera() {
         });
 
         // Send the image to the server
-        const response = await axios.post(
-          "https://cc8e-2402-800-63b8-8094-980c-b1a7-fa87-a765.ngrok-free.app/upload",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
+        const response = await axios.post(URL_API_SENT_IMAGE, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
           },
-        );
+        });
 
         // Handle response
         console.log("Response: ", response.data.Result);
         if (response.data.Result) {
-          Alert.alert(response.data.Result);
+          setResult(response.data.Result);
         }
       } catch (error) {
         console.log("Error uploading image: ", error);
@@ -92,15 +92,15 @@ export default function Camera() {
   const handleSetAutoCapture = () => {
     if (isAutoCapture === "pause") {
       setIsAutoCapture("play");
+      // Clear interval to stop auto-capture
+      clearInterval(intervalId.current);
+      intervalId.current = null;
+    } else if (isAutoCapture === "play") {
+      setIsAutoCapture("pause");
       // Start interval for auto-capture
       intervalId.current = setInterval(() => {
         handleTakePhoto();
       }, timerCapture);
-    } else if (isAutoCapture === "play") {
-      setIsAutoCapture("pause");
-      // Clear interval to stop auto-capture
-      clearInterval(intervalId.current);
-      intervalId.current = null;
     }
   };
 
@@ -108,7 +108,7 @@ export default function Camera() {
   const handleTimerCaptureUp = () => {
     setTimerCapture((prevTimer) => {
       const newTimer = prevTimer + 1000;
-      if (isAutoCapture === "play") {
+      if (isAutoCapture === "pause") {
         // Clear and restart interval if auto-capture is active
         clearInterval(intervalId.current);
         intervalId.current = setInterval(() => {
@@ -124,7 +124,7 @@ export default function Camera() {
     if (timerCapture > 2000) {
       setTimerCapture((prevTimer) => {
         const newTimer = prevTimer - 1000;
-        if (isAutoCapture === "play") {
+        if (isAutoCapture === "pause") {
           // Clear and restart interval if auto-capture is active
           clearInterval(intervalId.current);
           intervalId.current = setInterval(() => {
@@ -138,6 +138,7 @@ export default function Camera() {
 
   return (
     <View style={styles.container}>
+      {<Text style={styles.resultText}>{result || "Result"}</Text>}
       <CameraView style={styles.camera} facing={facing} ref={cameraRef}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
@@ -148,7 +149,14 @@ export default function Camera() {
           </TouchableOpacity>
         </View>
 
-        <Text style={{ textAlign: "center", fontSize: 20, color: "red" }}>
+        <Text
+          style={{
+            textAlign: "center",
+            fontWeight: "bold",
+            fontSize: 22,
+            color: "red",
+          }}
+        >
           Timer: {timerCapture / 1000}s
         </Text>
         <View style={styles.buttonContainer2}>
@@ -163,7 +171,9 @@ export default function Camera() {
             onPress={handleSetAutoCapture}
           >
             <AntDesign name={isAutoCapture} size={44} color="black" />
-            <Text style={{color:"blue", fontWeight:"bold", fontSize:15}}>{isAutoCapture}</Text>
+            <Text style={{ color: "blue", fontWeight: "bold", fontSize: 15 }}>
+              {isAutoCapture}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
@@ -203,13 +213,26 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: "flex-end",
     alignItems: "center",
-    marginHorizontal: 10,
-    backgroundColor: "gray",
-    borderRadius: 10,
+    marginHorizontal: 8,
+    backgroundColor: "transparent",
+    justifyContent: "center",
+    borderStyle: "solid",
+    borderWidth: 2,
+    borderRadius: 8,
   },
   text: {
     fontSize: 24,
     fontWeight: "bold",
     color: "white",
+  },
+  resultText: {
+    height: 80,
+    color: "red",
+    fontWeight: "bold",
+    fontSize: 22,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
   },
 });
