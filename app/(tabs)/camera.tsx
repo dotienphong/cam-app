@@ -21,8 +21,9 @@ export default function Camera() {
   const intervalId = useRef<any>(null);
   const [result, setResult] = useState<string | null>(null);
 
-  const URL_API_SENT_IMAGE =
-    "https://cc8e-2402-800-63b8-8094-980c-b1a7-fa87-a765.ngrok-free.app/upload";
+  // const URL_API_SENT_IMAGE =
+  //   "https://cc8e-2402-800-63b8-8094-980c-b1a7-fa87-a765.ngrok-free.app/upload";
+  const URL_API_SENT_IMAGE = "http://weblearn.ddns.net:4004/upload";
 
   // Request camera permissions
   if (!permission) {
