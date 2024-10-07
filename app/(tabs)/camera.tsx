@@ -138,40 +138,43 @@ export default function Camera() {
 
   return (
     <View style={styles.container}>
-      {<Text style={styles.resultText}>{result || "Result"}</Text>}
       <CameraView style={styles.camera} facing={facing} ref={cameraRef}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-            <AntDesign name="retweet" size={44} color="black" />
+            <AntDesign name="retweet" size={44} color="yellow" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={handleTakePhoto}>
-            <AntDesign name="camera" size={44} color="black" />
+            <AntDesign name="camera" size={44} color="yellow" />
           </TouchableOpacity>
         </View>
 
-        <Text
-          style={{
-            textAlign: "center",
-            fontWeight: "bold",
-            fontSize: 22,
-            color: "red",
-          }}
-        >
-          Timer: {timerCapture / 1000}s
-        </Text>
         <View style={styles.buttonContainer2}>
           <TouchableOpacity
             style={styles.button}
             onPress={handleTimerCaptureDown}
           >
-            <AntDesign name="minus" size={44} color="black" />
+            <AntDesign name="minus" size={44} color="yellow" />
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.button}
+            style={{ ...styles.button, backgroundColor: "rgb(143, 253, 171)" }}
             onPress={handleSetAutoCapture}
           >
-            <AntDesign name={isAutoCapture} size={44} color="black" />
-            <Text style={{ color: "blue", fontWeight: "bold", fontSize: 15 }}>
+            <Text
+              style={{
+                textAlign: "center",
+                fontWeight: "bold",
+                fontSize: 18,
+                color: "red",
+              }}
+            >
+              {timerCapture / 1000}s
+            </Text>
+            <AntDesign
+              name={isAutoCapture}
+              size={44}
+              color={isAutoCapture === "play" ? "blue" : "red"}
+            />
+            <Text style={{ color: "blue", fontWeight: "bold", fontSize: 16 }}>
               {isAutoCapture}
             </Text>
           </TouchableOpacity>
@@ -179,10 +182,11 @@ export default function Camera() {
             style={styles.button}
             onPress={handleTimerCaptureUp}
           >
-            <AntDesign name="plus" size={44} color="black" />
+            <AntDesign name="plus" size={44} color="yellow" />
           </TouchableOpacity>
         </View>
       </CameraView>
+      {<Text style={styles.resultText}>{result || "Result"}</Text>}
     </View>
   );
 }
@@ -219,6 +223,7 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 2,
     borderRadius: 8,
+    marginTop: 10,
   },
   text: {
     fontSize: 24,
@@ -226,8 +231,9 @@ const styles = StyleSheet.create({
     color: "white",
   },
   resultText: {
-    height: 80,
+    maxHeight: 400,
     color: "red",
+    backgroundColor: "transparent",
     fontWeight: "bold",
     fontSize: 22,
     display: "flex",
