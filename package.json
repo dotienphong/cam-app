@@ -10,7 +10,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "build-android": "eas build -p android --profile apk",
-    "build-ios": "eas build --platform ios",
+    "build-ios": "eas build --platform ios --profile preview",
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint"

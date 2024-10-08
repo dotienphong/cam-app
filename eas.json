@@ -12,16 +12,26 @@
     "preview": {
       "android": {
         "gradleCommand": ":app:assembleRelease"
+      },
+      "ios": {
+        "simulator": true
       }
     },
     "preview2": {
       "android": {
+        "distribution": "internal"
+      },
+      "ios": {
         "distribution": "internal"
       }
     },
     "production": {
       "android": {
         "buildType": "app-bundle"
+      },
+      "ios": {
+        "simulator": false,
+        "distribution": "store"
       }
     }
   }
