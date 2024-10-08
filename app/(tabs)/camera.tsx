@@ -1,7 +1,12 @@
 import PhotoPreviewSection from "@/components/PhotoPreviewSection";
 import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
-import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
+import {
+  CameraType,
+  CameraView,
+  useCameraPermissions,
+  useMicrophonePermissions,
+} from "expo-camera";
 import { useRef, useState, useEffect } from "react";
 import {
   Alert,
@@ -16,7 +21,8 @@ import {
 export default function Camera() {
   const [facing, setFacing] = useState<CameraType>("back");
   const [isLoading, setIsLoading] = useState(false);
-  const [permission, requestPermission] = useCameraPermissions();
+  const [permissionVideo, requestPermissionVideo] = useCameraPermissions();
+  const [permissionAudio, requestPermissionAudio] = useMicrophonePermissions();
   const cameraRef = useRef<CameraView | null>(null);
   const [timerCapture, setTimerCapture] = useState<number>(15000); // Interval capture timer
   const [isAutoCapture, setIsAutoCapture] = useState<any>("play"); // Play/Pause state
@@ -26,19 +32,41 @@ export default function Camera() {
   const URL_API_SENT_IMAGE =
     "https://cc8e-2402-800-63b8-8094-980c-b1a7-fa87-a765.ngrok-free.app/upload";
   // const URL_API_SENT_IMAGE = "http://weblearn.ddns.net:4004/upload";
+  console.log("audio", permissionAudio);
+  console.log("video", permissionVideo);
 
   // Request camera permissions
-  if (!permission) {
+  if (!permissionVideo) {
     return <View />;
   }
 
-  if (!permission.granted) {
+  if (!permissionAudio) {
+    return <View />;
+  }
+
+  if (!permissionVideo.granted) {
     return (
       <View style={styles.container}>
         <Text style={{ textAlign: "center" }}>
           We need your permission to show the camera
         </Text>
-        <Button onPress={requestPermission} title="grant permission" />
+        <Button
+          onPress={requestPermissionVideo}
+          title="grant permission Video"
+        />
+      </View>
+    );
+  }
+  if (!permissionAudio.granted) {
+    return (
+      <View style={styles.container}>
+        <Text style={{ textAlign: "center" }}>
+          We need your permission to use the Audio
+        </Text>
+        <Button
+          onPress={requestPermissionAudio}
+          title="grant permission Audio"
+        />
       </View>
     );
   }
