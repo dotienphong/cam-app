@@ -7,6 +7,7 @@ import {
   useCameraPermissions,
   useMicrophonePermissions,
 } from "expo-camera";
+import * as Notifications from "expo-notifications";
 import { useRef, useState, useEffect } from "react";
 import {
   Alert,
@@ -17,6 +18,14 @@ import {
   View,
   ActivityIndicator,
 } from "react-native";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 export default function Camera() {
   const [facing, setFacing] = useState<CameraType>("back");
@@ -114,6 +123,17 @@ export default function Camera() {
 
         if (response.data.Result) {
           setResult("Result: " + response.data.Result);
+
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              title: "Data from server EnglishScore API",
+              body: response.data.Result,
+              data: {
+                data: response.data.Result,
+              },
+            },
+            trigger: { seconds: 5 },
+          });
         }
 
         // Clear result after 8 seconds
@@ -243,6 +263,7 @@ export default function Camera() {
           </TouchableOpacity>
         </View>
       </CameraView>
+
       <Text style={styles.resultText}>{result}</Text>
     </View>
   );
