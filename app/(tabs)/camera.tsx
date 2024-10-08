@@ -158,6 +158,13 @@ export default function Camera() {
           <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
             <AntDesign name="retweet" size={44} color="yellow" />
           </TouchableOpacity>
+          {isLoading ? (
+            <ActivityIndicator
+              size="large"
+              color="red"
+              style={{ margin: 10 }}
+            />
+          ) : null}
           <TouchableOpacity style={styles.button} onPress={handleTakePhoto}>
             <AntDesign name="camera" size={44} color="yellow" />
           </TouchableOpacity>
@@ -201,11 +208,7 @@ export default function Camera() {
           </TouchableOpacity>
         </View>
       </CameraView>
-      {isLoading ? (
-        <ActivityIndicator size="large" color="yellow" style={{ margin: 10 }} />
-      ) : (
-        <Text style={styles.resultText}>{result}</Text>
-      )}
+      <Text style={styles.resultText}>{result}</Text>
     </View>
   );
 }
