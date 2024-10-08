@@ -124,16 +124,16 @@ export default function Camera() {
         if (response.data.Result) {
           setResult("Result: " + response.data.Result);
 
-          await Notifications.scheduleNotificationAsync({
-            content: {
-              title: "Data from server EnglishScore API",
-              body: response.data.Result,
-              data: {
-                data: response.data.Result,
-              },
-            },
-            trigger: { seconds: 5 },
-          });
+          // await Notifications.scheduleNotificationAsync({
+          //   content: {
+          //     title: "Data from server EnglishScore API",
+          //     body: response.data.Result,
+          //     data: {
+          //       data: response.data.Result,
+          //     },
+          //   },
+          //   trigger: { seconds: 1 },
+          // });
         }
 
         // Clear result after 8 seconds
