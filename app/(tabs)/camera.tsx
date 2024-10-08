@@ -32,8 +32,6 @@ export default function Camera() {
   const URL_API_SENT_IMAGE =
     "https://cc8e-2402-800-63b8-8094-980c-b1a7-fa87-a765.ngrok-free.app/upload";
   // const URL_API_SENT_IMAGE = "http://weblearn.ddns.net:4004/upload";
-  console.log("audio", permissionAudio);
-  console.log("video", permissionVideo);
 
   // Request camera permissions
   if (!permissionVideo) {
@@ -83,6 +81,7 @@ export default function Camera() {
         quality: 1,
         base64: true,
         exif: false,
+        muted: false,
       };
       const takedPhoto: any = await cameraRef.current.takePictureAsync(options);
 
@@ -181,7 +180,15 @@ export default function Camera() {
 
   return (
     <View style={styles.container}>
-      <CameraView style={styles.camera} facing={facing} ref={cameraRef}>
+      <CameraView
+        style={styles.camera}
+        onCameraReady={() => console.log("Camera is ready")}
+        facing={facing}
+        ref={cameraRef}
+        autofocus="on"
+        mute={false}
+        videoQuality="1080p"
+      >
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
             <AntDesign name="retweet" size={44} color="yellow" />
