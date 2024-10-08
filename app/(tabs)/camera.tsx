@@ -18,7 +18,7 @@ import {
   View,
   ActivityIndicator,
 } from "react-native";
-
+import { useBatteryLevel } from "expo-battery";
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -28,6 +28,7 @@ Notifications.setNotificationHandler({
 });
 
 export default function Camera() {
+  const batteryLevel = useBatteryLevel();
   const [facing, setFacing] = useState<CameraType>("back");
   const [isLoading, setIsLoading] = useState(false);
   const [permissionVideo, requestPermissionVideo] = useCameraPermissions();
@@ -276,6 +277,7 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
   },
+  battery: {},
   buttonContainer: {
     flex: 1,
     flexDirection: "row",
