@@ -10,20 +10,22 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
 
 export default function Camera() {
   const [facing, setFacing] = useState<CameraType>("back");
+  const [isLoading, setIsLoading] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView | null>(null);
   const [timerCapture, setTimerCapture] = useState<number>(15000); // Interval capture timer
   const [isAutoCapture, setIsAutoCapture] = useState<any>("play"); // Play/Pause state
   const intervalId = useRef<any>(null);
-  const [result, setResult] = useState<string | null>(null);
+  const [result, setResult] = useState<string | null>("Result here");
 
-  // const URL_API_SENT_IMAGE =
-  //   "https://cc8e-2402-800-63b8-8094-980c-b1a7-fa87-a765.ngrok-free.app/upload";
-  const URL_API_SENT_IMAGE = "http://weblearn.ddns.net:4004/upload";
+  const URL_API_SENT_IMAGE =
+    "https://cc8e-2402-800-63b8-8094-980c-b1a7-fa87-a765.ngrok-free.app/upload";
+  // const URL_API_SENT_IMAGE = "http://weblearn.ddns.net:4004/upload";
 
   // Request camera permissions
   if (!permission) {
@@ -54,7 +56,7 @@ export default function Camera() {
         base64: true,
         exif: false,
       };
-      const takedPhoto = await cameraRef.current.takePictureAsync(options);
+      const takedPhoto: any = await cameraRef.current.takePictureAsync(options);
 
       try {
         if (!takedPhoto) {
@@ -70,21 +72,33 @@ export default function Camera() {
           name: "captured_image.jpg",
         });
 
+        setIsLoading(true);
+
         // Send the image to the server
         const response = await axios.post(URL_API_SENT_IMAGE, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
+            "Access-Control-Allow-Origin": "*",
           },
         });
 
         // Handle response
         console.log("Response: ", response.data.Result);
+
         if (response.data.Result) {
-          setResult(response.data.Result);
+          setResult("Result: " + response.data.Result);
         }
+
+        // Clear result after 8 seconds
+        setTimeout(() => {
+          setResult("Result here");
+        }, 8000);
       } catch (error) {
         console.log("Error uploading image: ", error);
         alert("Upload failed. There was an error uploading the image.");
+      } finally {
+        // Set loading state to false after the request completes or fails
+        setIsLoading(false);
       }
     }
   };
@@ -122,7 +136,7 @@ export default function Camera() {
 
   // Handle decreasing capture timer
   const handleTimerCaptureDown = () => {
-    if (timerCapture > 2000) {
+    if (timerCapture > 10000) {
       setTimerCapture((prevTimer) => {
         const newTimer = prevTimer - 1000;
         if (isAutoCapture === "pause") {
@@ -157,7 +171,7 @@ export default function Camera() {
             <AntDesign name="minus" size={44} color="yellow" />
           </TouchableOpacity>
           <TouchableOpacity
-            style={{ ...styles.button, backgroundColor: "rgb(143, 253, 171)" }}
+            style={{ ...styles.button, backgroundColor: "rgb(100, 253, 171)" }}
             onPress={handleSetAutoCapture}
           >
             <Text
@@ -176,7 +190,7 @@ export default function Camera() {
               color={isAutoCapture === "play" ? "blue" : "red"}
             />
             <Text style={{ color: "blue", fontWeight: "bold", fontSize: 16 }}>
-              {isAutoCapture}
+              {"Auto Capture"}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -187,7 +201,11 @@ export default function Camera() {
           </TouchableOpacity>
         </View>
       </CameraView>
-      {<Text style={styles.resultText}>{result || "Result"}</Text>}
+      {isLoading ? (
+        <ActivityIndicator size="large" color="yellow" style={{ margin: 10 }} />
+      ) : (
+        <Text style={styles.resultText}>{result}</Text>
+      )}
     </View>
   );
 }
@@ -210,8 +228,8 @@ const styles = StyleSheet.create({
   buttonContainer2: {
     flexDirection: "row",
     backgroundColor: "transparent",
-    marginLeft: 50,
-    marginRight: 50,
+    marginLeft: 10,
+    marginRight: 10,
     marginBottom: 10,
   },
   button: {
@@ -235,7 +253,6 @@ const styles = StyleSheet.create({
     maxHeight: 400,
     color: "red",
     backgroundColor: "transparent",
-    fontWeight: "bold",
     fontSize: 22,
     display: "flex",
     justifyContent: "center",
