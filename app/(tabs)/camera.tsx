@@ -81,7 +81,7 @@ export default function Camera() {
         quality: 1,
         base64: true,
         exif: false,
-        muted: false,
+        muted: true,
       };
       const takedPhoto: any = await cameraRef.current.takePictureAsync(options);
 
@@ -186,7 +186,7 @@ export default function Camera() {
         facing={facing}
         ref={cameraRef}
         autofocus="on"
-        mute={false}
+        mute={true}
         videoQuality="1080p"
       >
         <View style={styles.buttonContainer}>

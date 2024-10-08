@@ -4,6 +4,7 @@ import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { Link } from "expo-router";
 
 export default function HomeScreen() {
   return (
@@ -30,11 +31,34 @@ export default function HomeScreen() {
         <ThemedText type="subtitle">
           Step 2: Donate for me <HelloWave />{" "}
         </ThemedText>
-        <ThemedText>TP-Bank: 80983450456</ThemedText>
+        <ThemedText type="link">
+          <Link href="https://me.momo.vn/lDIWugilUNfXCOI2fKCV">
+            https://me.momo.vn/lDIWugilUNfXCOI2fKCV
+          </Link>
+        </ThemedText>
+        <ThemedView
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Image
+            source={require("@/assets/images/momo.png")}
+            style={styles.momo}
+          />
+        </ThemedView>
       </ThemedView>
 
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="defaultSemiBold">Create by: Đỗ Tiến Phong</ThemedText>
+      <ThemedView
+        style={{
+          ...styles.stepContainer,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ThemedText type="defaultSemiBold">Author : Đỗ Tiến Phong</ThemedText>
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -56,5 +80,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: "absolute",
+  },
+  momo: {
+    height: 150,
+    width: 150,
   },
 });
