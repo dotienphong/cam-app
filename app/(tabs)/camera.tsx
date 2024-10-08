@@ -119,7 +119,7 @@ export default function Camera() {
         });
 
         // Handle response
-        console.log("Response: ", response.data.Result);
+        console.log("Response result: ", response.data.Result);
 
         if (response.data.Result) {
           setResult("Result: " + response.data.Result);
@@ -144,7 +144,6 @@ export default function Camera() {
         console.log("Error uploading image: ", error);
         alert("Upload failed. There was an error uploading the image.");
       } finally {
-        // Set loading state to false after the request completes or fails
         setIsLoading(false);
       }
     }
@@ -153,16 +152,16 @@ export default function Camera() {
   // Handle play/pause auto-capture
   const handleSetAutoCapture = () => {
     if (isAutoCapture === "pause") {
-      setIsAutoCapture("play");
-      // Clear interval to stop auto-capture
       clearInterval(intervalId.current);
       intervalId.current = null;
+      setIsAutoCapture("play");
     } else if (isAutoCapture === "play") {
-      setIsAutoCapture("pause");
-      // Start interval for auto-capture
+      // Trigger the photo capture immediately before starting the interval
+      handleTakePhoto();
       intervalId.current = setInterval(() => {
         handleTakePhoto();
       }, timerCapture);
+      setIsAutoCapture("pause");
     }
   };
 
