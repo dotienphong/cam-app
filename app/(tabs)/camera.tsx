@@ -109,7 +109,7 @@ export default function Camera() {
 
       try {
         if (!takedPhoto) {
-          alert("No photo to upload");
+          alert("NO photo to upload ");
           return;
         }
 
@@ -148,11 +148,6 @@ export default function Camera() {
           //   trigger: { seconds: 1 },
           // });
         }
-
-        // Clear result after 10 seconds
-        setTimeout(() => {
-          setResult("Result here");
-        }, 10000);
       } catch (error) {
         console.log("Error uploading image: ", error);
         alert("Upload failed. There was an error uploading the image.");
@@ -160,6 +155,10 @@ export default function Camera() {
         setIsLoading(false);
       }
     }
+  };
+
+  const handleRemoveResult = () => {
+    setResult("Result here");
   };
 
   // Handle play/pause auto-capture
@@ -216,32 +215,35 @@ export default function Camera() {
         style={styles.input}
         onChangeText={setInputValue}
         value={inputValue}
-        placeholder="API backend : http://weblearn.ddns.net:4004/upload"
+        placeholder="Input API backend URL"
+        placeholderTextColor="white"
         keyboardType="default"
+        returnKeyType="done"
         onSubmitEditing={handleSubmit}
       />
+
       <CameraView
         style={styles.camera}
         onCameraReady={() => console.log("Camera is ready")}
         facing={facing}
         ref={cameraRef}
         autofocus="on"
-        mute={true}
         videoQuality="1080p"
+        mute={true}
       >
+        {isLoading ? (
+          <ActivityIndicator size="large" color="red" style={{ margin: 50 }} />
+        ) : null}
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
             <AntDesign name="retweet" size={44} color="yellow" />
           </TouchableOpacity>
-          {isLoading ? (
-            <ActivityIndicator
-              size="large"
-              color="red"
-              style={{ margin: 10 }}
-            />
-          ) : null}
+
           <TouchableOpacity style={styles.button} onPress={handleTakePhoto}>
             <AntDesign name="camera" size={44} color="yellow" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handleRemoveResult}>
+            <AntDesign name="delete" size={44} color="yellow" />
           </TouchableOpacity>
         </View>
 
@@ -296,7 +298,8 @@ const styles = StyleSheet.create({
   input: {
     textAlign: "center",
     fontSize: 15,
-    color: "blue",
+    color: "yellow",
+    backgroundColor: "purple",
     borderColor: "white",
     height: 40,
     marginTop: 40,
