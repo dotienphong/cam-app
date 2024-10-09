@@ -33,7 +33,7 @@
       [
         "expo-notifications",
         {
-          "icon": "./local/assets/images/englishscore.png",
+          "icon": "./assets/images/englishscore.png",
           "color": "#ffffff",
           "defaultChannel": "default"
         }
