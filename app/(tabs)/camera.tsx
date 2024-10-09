@@ -19,6 +19,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useBatteryLevel } from "expo-battery";
+import { TextInput } from "react-native";
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -38,9 +39,12 @@ export default function Camera() {
   const [isAutoCapture, setIsAutoCapture] = useState<any>("play"); // Play/Pause state
   const intervalId = useRef<any>(null);
   const [result, setResult] = useState<string | null>("Result here");
+  const [inputValue, setInputValue] = useState("");
 
   const URL_API_SENT_IMAGE =
-    "https://cc8e-2402-800-63b8-8094-980c-b1a7-fa87-a765.ngrok-free.app/upload";
+    inputValue == ""
+      ? "https://cc8e-2402-800-63b8-8094-980c-b1a7-fa87-a765.ngrok-free.app/upload"
+      : inputValue;
   // const URL_API_SENT_IMAGE = "http://weblearn.ddns.net:4004/upload";
 
   // Request camera permissions
@@ -83,6 +87,14 @@ export default function Camera() {
   function toggleCameraFacing() {
     setFacing((current) => (current === "back" ? "front" : "back"));
   }
+
+  const handleSubmit = () => {
+    if (inputValue == "") {
+      Alert.alert("Using default API");
+    } else {
+      Alert.alert("Using the new API:", inputValue);
+    }
+  };
 
   // Take a photo
   const handleTakePhoto = async () => {
@@ -200,6 +212,14 @@ export default function Camera() {
 
   return (
     <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        onChangeText={setInputValue}
+        value={inputValue}
+        placeholder="API backend : http://weblearn.ddns.net:4004/upload"
+        keyboardType="default"
+        onSubmitEditing={handleSubmit}
+      />
       <CameraView
         style={styles.camera}
         onCameraReady={() => console.log("Camera is ready")}
@@ -263,7 +283,6 @@ export default function Camera() {
           </TouchableOpacity>
         </View>
       </CameraView>
-
       <Text style={styles.resultText}>{result}</Text>
     </View>
   );
@@ -273,6 +292,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+  },
+  input: {
+    textAlign: "center",
+    fontSize: 15,
+    color: "blue",
+    borderColor: "white",
+    height: 40,
+    marginTop: 40,
+    marginBottom: 10,
+    marginLeft: 15,
+    marginRight: 15,
+    borderWidth: 2,
+    padding: 10,
   },
   camera: {
     flex: 1,
