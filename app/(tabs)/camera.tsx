@@ -38,7 +38,7 @@ export default function Camera() {
   const [timerCapture, setTimerCapture] = useState<number>(15000); // Interval capture timer
   const [isAutoCapture, setIsAutoCapture] = useState<any>("play"); // Play/Pause state
   const intervalId = useRef<any>(null);
-  const [result, setResult] = useState<string | null>("Result here");
+  const [result, setResult] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState("");
 
   const URL_API_SENT_IMAGE =
@@ -158,7 +158,7 @@ export default function Camera() {
   };
 
   const handleRemoveResult = () => {
-    setResult("Result here");
+    setResult(null);
   };
 
   // Handle play/pause auto-capture
@@ -231,6 +231,8 @@ export default function Camera() {
         videoQuality="1080p"
         mute={true}
       >
+        <Text style={styles.resultText}>{result}</Text>
+
         {isLoading ? (
           <ActivityIndicator size="large" color="red" style={{ margin: 50 }} />
         ) : null}
@@ -239,7 +241,10 @@ export default function Camera() {
             <AntDesign name="retweet" size={44} color="yellow" />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button} onPress={handleTakePhoto}>
+          <TouchableOpacity
+            style={{ ...styles.button, backgroundColor: "orange" }}
+            onPress={handleTakePhoto}
+          >
             <Text
               style={{
                 textAlign: "center",
@@ -296,7 +301,6 @@ export default function Camera() {
           </TouchableOpacity>
         </View>
       </CameraView>
-      <Text style={styles.resultText}>{result}</Text>
     </View>
   );
 }
@@ -364,5 +368,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
+    fontWeight: "bold",
   },
 });
