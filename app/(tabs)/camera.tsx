@@ -149,10 +149,10 @@ export default function Camera() {
           // });
         }
 
-        // Clear result after 8 seconds
+        // Clear result after 10 seconds
         setTimeout(() => {
           setResult("Result here");
-        }, timerCapture - 1000);
+        }, 10000);
       } catch (error) {
         console.log("Error uploading image: ", error);
         alert("Upload failed. There was an error uploading the image.");
