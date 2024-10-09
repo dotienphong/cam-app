@@ -240,8 +240,19 @@ export default function Camera() {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.button} onPress={handleTakePhoto}>
+            <Text
+              style={{
+                textAlign: "center",
+                fontWeight: "bold",
+                fontSize: 15,
+                color: "red",
+              }}
+            >
+              Take Photo
+            </Text>
             <AntDesign name="camera" size={44} color="yellow" />
           </TouchableOpacity>
+
           <TouchableOpacity style={styles.button} onPress={handleRemoveResult}>
             <AntDesign name="delete" size={44} color="yellow" />
           </TouchableOpacity>
