@@ -231,32 +231,37 @@ export default function Camera() {
         videoQuality="1080p"
         mute={true}
       >
-        <Text style={styles.resultText}>{result}</Text>
+        <Text style={styles.resultText}>{result !== null && result}</Text>
 
-        {isLoading ? (
-          <ActivityIndicator size="large" color="red" style={{ margin: 50 }} />
-        ) : null}
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
             <AntDesign name="retweet" size={44} color="yellow" />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={{ ...styles.button, backgroundColor: "orange" }}
-            onPress={handleTakePhoto}
-          >
-            <Text
-              style={{
-                textAlign: "center",
-                fontWeight: "bold",
-                fontSize: 15,
-                color: "red",
-              }}
+          {isLoading ? (
+            <ActivityIndicator
+              size="large"
+              color="red"
+              style={{ marginTop: 50 }}
+            />
+          ) : (
+            <TouchableOpacity
+              style={{ ...styles.button, backgroundColor: "orange" }}
+              onPress={handleTakePhoto}
             >
-              Take Photo
-            </Text>
-            <AntDesign name="camera" size={44} color="yellow" />
-          </TouchableOpacity>
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  fontSize: 15,
+                  color: "red",
+                }}
+              >
+                Take Photo
+              </Text>
+              <AntDesign name="camera" size={44} color="yellow" />
+            </TouchableOpacity>
+          )}
 
           <TouchableOpacity style={styles.button} onPress={handleRemoveResult}>
             <AntDesign name="delete" size={44} color="yellow" />
