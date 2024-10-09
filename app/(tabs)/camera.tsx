@@ -242,7 +242,12 @@ export default function Camera() {
             <ActivityIndicator
               size="large"
               color="red"
-              style={{ marginTop: 50 }}
+              style={{
+                ...styles.button,
+                paddingBottom: 22,
+                paddingTop: 22,
+                backgroundColor: "white",
+              }}
             />
           ) : (
             <TouchableOpacity
@@ -294,9 +299,6 @@ export default function Camera() {
               size={44}
               color={isAutoCapture === "play" ? "blue" : "red"}
             />
-            <Text style={{ color: "blue", fontWeight: "bold", fontSize: 16 }}>
-              {"Auto Capture"}
-            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
