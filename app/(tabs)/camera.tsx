@@ -43,7 +43,7 @@ export default function Camera() {
 
   const URL_API_SENT_IMAGE =
     inputValue == ""
-      ? "https://cc8e-2402-800-63b8-8094-980c-b1a7-fa87-a765.ngrok-free.app/upload"
+      ? "https://9f72-2402-800-63b8-a89b-f9d9-b8d3-8202-ddd9.ngrok-free.app/upload"
       : inputValue;
   // const URL_API_SENT_IMAGE = "http://weblearn.ddns.net:4004/upload";
 
@@ -152,7 +152,7 @@ export default function Camera() {
         // Clear result after 8 seconds
         setTimeout(() => {
           setResult("Result here");
-        }, 8000);
+        }, timerCapture - 1000);
       } catch (error) {
         console.log("Error uploading image: ", error);
         alert("Upload failed. There was an error uploading the image.");
