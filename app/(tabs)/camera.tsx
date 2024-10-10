@@ -94,62 +94,44 @@ export default function Camera() {
 
   // Take a photo
   const handleTakePhoto = async () => {
-    if (cameraRef.current) {
-      const options = {
-        quality: 1,
-        base64: true,
-        exif: false,
-        muted: true,
-      };
-      const takedPhoto: any = await cameraRef.current.takePictureAsync(options);
-
-      try {
-        if (!takedPhoto) {
-          alert("NO photo to upload ");
-          return;
-        }
-
-        // Create form data to send the image
-        const formData: any = new FormData();
-        formData.append("image", {
-          uri: takedPhoto.uri,
-          type: "image/jpeg",
-          name: "captured_image.jpg",
-        });
-
-        setIsLoading(true);
-
-        // Send the image to the server
-        const response = await axios.post(URL_API_SENT_IMAGE, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "Access-Control-Allow-Origin": "*",
-          },
-        });
-
-        // Handle response
-        console.log("Response result: ", response.data.Result);
-
-        if (response.data.Result) {
-          setResult("Result: " + response.data.Result);
-
-          // await Notifications.scheduleNotificationAsync({
-          //   content: {
-          //     title: "Data from server EnglishScore API",
-          //     body: response.data.Result,
-          //     data: {
-          //       data: response.data.Result,
-          //     },
-          //   },
-          //   trigger: { seconds: 1 },
-          // });
-        }
-      } catch (error) {
-        console.log("Error uploading image: ", error);
-        alert("Upload failed. There was an error uploading the image.");
-      } finally {
-        setIsLoading(false);
+    if (isLoading || !cameraRef.current) return;
+    setIsLoading(true);
+    try {
+      const options = { quality: 1, base64: true, exif: false };
+      const photo = await cameraRef.current.takePictureAsync(options);
+      if (!photo) {
+        alert("No photo to upload");
+        return;
       }
+
+      const formData: any = new FormData();
+      formData.append("image", {
+        uri: photo.uri,
+        type: "image/jpeg",
+        name: "captured_image.jpg",
+      });
+
+      // await Notifications.scheduleNotificationAsync({
+      //   content: {
+      //     title: "Data from server EnglishScore API",
+      //     body: response.data.Result,
+      //     data: {
+      //       data: response.data.Result,
+      //     },
+      //   },
+      //   trigger: { seconds: 1 },
+      // });
+
+      const response = await axios.post(URL_API_SENT_IMAGE, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      setResult("Result: " + response.data.Result);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Upload failed. There was an error uploading the image.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
