@@ -48,11 +48,7 @@ export default function Camera() {
   // const URL_API_SENT_IMAGE = "http://weblearn.ddns.net:4004/upload";
 
   // Request camera permissions
-  if (!permissionVideo) {
-    return <View />;
-  }
-
-  if (!permissionAudio) {
+  if (!permissionVideo || !permissionAudio) {
     return <View />;
   }
 
