@@ -6,7 +6,6 @@ workflows:
       flutter: stable
       xcode: latest
       node: 20.x
-      working_directory: "."
       cocoapods: default
     scripts:
       - name: Install dependencies
