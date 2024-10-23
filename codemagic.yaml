@@ -1,0 +1,19 @@
+workflows:
+  react_native_build:
+    name: React Native Build Workflow
+    environment:
+      node: latest
+      xcode: latest
+      android: true
+    scripts:
+      - name: Install dependencies
+        script: yarn install
+      - name: Install Pods for iOS
+        script: cd ios && pod install
+      - name: Build Android
+        script: ./gradlew assembleRelease
+      - name: Build iOS
+        script: xcodebuild -workspace ios/YourApp.xcworkspace -scheme YourApp -sdk iphoneos -configuration Release archive -archivePath $HOME/output/YourApp.xcarchive
+    artifacts:
+      - android/app/build/outputs/apk/release/app-release.apk
+      - $HOME/output/YourApp.xcarchive
