@@ -14,19 +14,19 @@ workflows:
           cd ios
           pod install
           cd ..
-      # - name: Build iOS
-      #   script: |
-      #     xcodebuild \
-      #       -workspace ios/english_test.xcworkspace \
-      #       -scheme YourApp \
-      #       -sdk iphoneos \
-      #       -configuration Release \
-      #       -archivePath $CI_WORKSPACE/build/ios/english_test.xcarchive \
-      #       archive
-      #     xcodebuild -exportArchive \
-      #       -archivePath $CI_WORKSPACE/build/ios/english_test.xcarchive \
-      #       -exportPath $CI_WORKSPACE/build/ios/ipa \
-      #       -exportOptionsPlist ios/exportOptions.plist
+      - name: Build iOS
+        script: |
+          xcodebuild \
+            -workspace ios/english_test.xcworkspace \
+            -scheme YourApp \
+            -sdk iphoneos \
+            -configuration Release \
+            -archivePath $CI_WORKSPACE/build/ios/english_test.xcarchive \
+            archive
+          xcodebuild -exportArchive \
+            -archivePath $CI_WORKSPACE/build/ios/english_test.xcarchive \
+            -exportPath $CI_WORKSPACE/build/ios/ipa \
+            -exportOptionsPlist ios/exportOptions.plist
       - name: Build Android
         script: |
           cd android
