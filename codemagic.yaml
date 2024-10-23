@@ -17,28 +17,27 @@ workflows:
           cd ..
       - name: Run tests
         script: npm test
+      - name: Build iOS
+        script: |
+          xcodebuild \
+            -workspace ios/english_test.xcworkspace \
+            -scheme YourApp \
+            -sdk iphoneos \
+            -configuration Release \
+            -archivePath $CI_WORKSPACE/build/ios/english_test.xcarchive \
+            archive
+          xcodebuild -exportArchive \
+            -archivePath $CI_WORKSPACE/build/ios/english_test.xcarchive \
+            -exportPath $CI_WORKSPACE/build/ios/ipa \
+            -exportOptionsPlist ios/exportOptions.plist
+      - name: Build Android
+        script: |
+          cd android
+          ./gradlew assembleRelease
     artifacts:
       - build/ios/ipa
-      - build/android/app/build/outputs/**/*.apk
+      - android/app/build/outputs/**/*.apk
     publishing:
       email:
         recipients:
           - "dotienphong1993@gmail.com"
-    ios:
-      build:
-        title: "iOS App Build"
-        project: "ios/english_test.xcodeproj"
-        scheme: "YourApp"
-        export_method: ad-hoc
-      signing:
-        development_team: YOUR_TEAM_ID
-        provisioning_profile: your_provisioning_profile_name
-    android:
-      build:
-        title: "Android App Build"
-        gradle_command: "assembleRelease"
-      signing:
-        keystore_path: /path/to/your/keystore.keystore
-        keystore_password: your_keystore_password
-        key_alias: your_key_alias
-        key_password: your_key_password
