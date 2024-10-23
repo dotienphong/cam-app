@@ -43,7 +43,7 @@ export default function Camera() {
 
   const URL_API_SENT_IMAGE =
     inputValue == ""
-      ? "https://9f72-2402-800-63b8-a89b-f9d9-b8d3-8202-ddd9.ngrok-free.app/upload"
+      ? "https://b4c2-2402-800-63ed-cc1f-c415-3060-c7f6-8b0.ngrok-free.app/upload"
       : inputValue;
   // const URL_API_SENT_IMAGE = "http://weblearn.ddns.net:4004/upload";
 
