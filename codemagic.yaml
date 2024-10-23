@@ -1,19 +1,44 @@
 workflows:
-  react_native_build:
-    name: React Native Build Workflow
+  react_native_workflow:
+    name: "React Native Build"
+    max_build_duration: 60
     environment:
-      node: latest
+      flutter: stable
       xcode: latest
-      android: true
+      node: 20.x
+      working_directory: "."
+      cocoapods: default
     scripts:
       - name: Install dependencies
-        script: yarn install
-      - name: Install Pods for iOS
-        script: cd ios && pod install
-      - name: Build Android
-        script: ./gradlew assembleRelease
-      - name: Build iOS
-        script: xcodebuild -workspace ios/YourApp.xcworkspace -scheme YourApp -sdk iphoneos -configuration Release archive -archivePath $HOME/output/YourApp.xcarchive
+        script: |
+          npm install
+          cd ios
+          pod install
+          cd ..
+      - name: Run tests
+        script: npm test
     artifacts:
-      - android/app/build/outputs/apk/release/app-release.apk
-      - $HOME/output/YourApp.xcarchive
+      - build/ios/ipa
+      - build/android/app/build/outputs/**/*.apk
+    publishing:
+      email:
+        recipients:
+          - "dotienphong1993@gmail.com"
+    ios:
+      build:
+        title: "iOS App Build"
+        project: "ios/english_test.xcodeproj"
+        scheme: "YourApp"
+        export_method: ad-hoc
+      signing:
+        development_team: YOUR_TEAM_ID
+        provisioning_profile: your_provisioning_profile_name
+    android:
+      build:
+        title: "Android App Build"
+        gradle_command: "assembleRelease"
+      signing:
+        keystore_path: /path/to/your/keystore.keystore
+        keystore_password: your_keystore_password
+        key_alias: your_key_alias
+        key_password: your_key_password
