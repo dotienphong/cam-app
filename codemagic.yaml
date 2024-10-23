@@ -8,7 +8,7 @@ workflows:
       - name: Install dependencies
         script: yarn install
       - name: Install Pods for iOS
-        script: npm run build-ios
+        script: pod install
       - name: Build iOS
         script: xcodebuild -workspace ios/YourApp.xcworkspace -scheme YourApp -sdk iphoneos -configuration Release archive -archivePath $HOME/output/YourApp.xcarchive
     artifacts:
