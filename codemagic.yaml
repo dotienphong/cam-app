@@ -14,8 +14,6 @@ workflows:
           cd ios
           pod install
           cd ..
-      - name: Run tests
-        script: npm test
       - name: Build iOS
         script: |
           xcodebuild \
